@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/fayzu/Desktop/**)",
+      "Bash(mkdir -p \"c:/Users/fayzu/Desktop/TISU-Marketing/public/images\")",
+      "Bash(mv \"c:/Users/fayzu/Desktop/TISU-Marketing/Comp 1_00000.png\" \"c:/Users/fayzu/Desktop/TISU-Marketing/public/images/logo.png\")"
+    ]
+  }
+}
