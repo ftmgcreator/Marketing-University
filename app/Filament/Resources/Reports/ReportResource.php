@@ -45,32 +45,31 @@ class ReportResource extends Resource
                     ->date('d.m.Y')
                     ->sortable(),
 
-                TextColumn::make('file_name')
-                    ->label('Fayl')
-                    ->limit(40)
-                    ->tooltip(fn ($state) => $state),
-
                 TextColumn::make('departments_count')
                     ->label('Kafedralar')
                     ->counts('departments')
                     ->badge()
-                    ->color('info'),
+                    ->color('info')
+                    ->alignCenter(),
 
                 TextColumn::make('groups_count')
                     ->label('Guruhlar')
                     ->counts('groups')
                     ->badge()
-                    ->color('info'),
+                    ->color('info')
+                    ->alignCenter(),
 
                 TextColumn::make('students_count')
                     ->label('Talabalar')
                     ->counts('students')
                     ->badge()
-                    ->color('info'),
+                    ->color('info')
+                    ->alignCenter(),
 
                 IconColumn::make('is_active')
                     ->label('Aktiv')
-                    ->boolean(),
+                    ->boolean()
+                    ->alignCenter(),
 
                 TextColumn::make('created_at')
                     ->label('Yuklangan')
@@ -82,6 +81,8 @@ class ReportResource extends Resource
                 Action::make('telegram')
                     ->label('Telegramga yuborish')
                     ->icon(Heroicon::OutlinedPaperAirplane)
+                    ->iconButton()
+                    ->tooltip('Telegramga yuborish')
                     ->color('primary')
                     ->requiresConfirmation()
                     ->modalHeading('Telegramga yuborilsinmi?')
@@ -115,6 +116,8 @@ class ReportResource extends Resource
                 Action::make('activate')
                     ->label('Aktivlashtirish')
                     ->icon(Heroicon::OutlinedCheckCircle)
+                    ->iconButton()
+                    ->tooltip('Aktivlashtirish')
                     ->color('success')
                     ->visible(fn (Report $record) => ! $record->is_active)
                     ->requiresConfirmation()
@@ -123,7 +126,10 @@ class ReportResource extends Resource
                         $record->update(['is_active' => true]);
                     }),
 
-                DeleteAction::make()->label('O\'chirish'),
+                DeleteAction::make()
+                    ->label('O\'chirish')
+                    ->iconButton()
+                    ->tooltip('O\'chirish'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

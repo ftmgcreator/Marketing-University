@@ -11,9 +11,9 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -40,35 +40,41 @@ class FacultyConfigResource extends Resource
                 ->options(fn () => static::activeReportFacultyNames())
                 ->searchable()
                 ->native(false)
+                ->prefixIcon(Heroicon::OutlinedAcademicCap)
+                ->columnSpanFull()
                 ->helperText('Aktiv hisobotdagi fakultetlar ro\'yxatidan tanlang'),
 
             TextInput::make('telegram_chat_id')
                 ->label('Telegram chat ID')
                 ->required()
+                ->prefixIcon(Heroicon::OutlinedHashtag)
                 ->placeholder('-1001234567890 (guruh) yoki 123456789 (shaxs)')
-                ->helperText('Botni guruhga qo\'shing va chat ID-ni oling. Shaxsiy chat uchun foydalanuvchi botga /start yuborishi kerak.'),
-
-            Toggle::make('is_active')
-                ->label('Aktiv')
-                ->default(true)
-                ->helperText('O\'chiq bo\'lsa Telegramga yuborilmaydi'),
+                ->columnSpanFull()
+                ->helperText('Botni guruhga qo\'shing yoki shaxsiy chat uchun foydalanuvchi botga /start yuborishi kerak'),
         ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('name')
+            ->striped()
             ->columns([
                 TextColumn::make('name')
                     ->label('Fakultet')
                     ->searchable()
                     ->sortable()
-                    ->weight('bold'),
+                    ->weight('semibold')
+                    ->wrap(),
 
                 TextColumn::make('telegram_chat_id')
                     ->label('Telegram chat ID')
                     ->copyable()
-                    ->fontFamily('mono'),
+                    ->copyMessage('Nusxalandi')
+                    ->fontFamily('mono')
+                    ->badge()
+                    ->color('gray')
+                    ->placeholder('—'),
 
                 IconColumn::make('is_active')
                     ->label('Aktiv')
@@ -78,11 +84,21 @@ class FacultyConfigResource extends Resource
                     ->label('Yangilangan')
                     ->dateTime('d.m.Y H:i')
                     ->since()
-                    ->sortable(),
+                    ->sortable()
+                    ->color('gray')
+                    ->toggleable(),
             ])
             ->recordActions([
-                EditAction::make()->label('Tahrirlash'),
-                DeleteAction::make()->label('O\'chirish'),
+                EditAction::make()
+                    ->label('Tahrirlash')
+                    ->iconButton()
+                    ->tooltip('Tahrirlash')
+                    ->color('primary')
+                    ->modalWidth(Width::ExtraLarge),
+                DeleteAction::make()
+                    ->label('O\'chirish')
+                    ->iconButton()
+                    ->tooltip('O\'chirish'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -414,7 +414,7 @@
         .empty-state { text-align: center; padding: 5rem 1rem; color: var(--text-muted); }
         .empty-state h2 { color: var(--text); margin: 0.5rem 0; font-weight: 600; }
 
-        .table-wrap { overflow-x: auto; max-height: 75vh; }
+        .table-wrap { overflow-x: auto; }
         .table-wrap::-webkit-scrollbar { width: 10px; height: 10px; }
         .table-wrap::-webkit-scrollbar-track { background: transparent; }
         .table-wrap::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 99px; }

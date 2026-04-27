@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="empty-state">
-        <h2>Hozircha hisobot yuklanmagan</h2>
-        <p>Admin panel orqali Excel fayl yuklash kerak.</p>
+        <h2>Hozircha hisobot mavjud emas</h2>
     </div>
 @endsection

@@ -9,6 +9,7 @@ use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
+use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 
 class ManageFacultyConfigs extends ManageRecords
@@ -44,7 +45,9 @@ class ManageFacultyConfigs extends ManageRecords
                         ->send();
                 }),
 
-            CreateAction::make()->label('Yangi qo\'shish'),
+            CreateAction::make()
+                ->label('Yangi qo\'shish')
+                ->modalWidth(Width::ExtraLarge),
         ];
     }
 }

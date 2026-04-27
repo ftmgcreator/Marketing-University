@@ -3,14 +3,14 @@
 namespace App\Filament\Resources\Reports\Pages;
 
 use App\Filament\Resources\Reports\ReportResource;
-use App\Services\ReportImporter;
+use App\Jobs\ProcessReportImport;
+use App\Models\ImportJob;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Storage;
 
 class ManageReports extends ManageRecords
 {
@@ -46,32 +46,23 @@ class ManageReports extends ManageRecords
                 ])
                 ->action(function (array $data): void {
                     $relativePath = is_array($data['file']) ? reset($data['file']) : $data['file'];
-                    $absolutePath = Storage::disk('local')->path($relativePath);
                     $originalName = $data['original_name'][$relativePath] ?? basename($relativePath);
 
-                    try {
-                        $importer = new ReportImporter();
-                        $report = $importer->import($absolutePath, $originalName, new \DateTimeImmutable($data['report_date']));
+                    $job = ImportJob::create([
+                        'user_id' => auth()->id(),
+                        'original_name' => $originalName,
+                        'file_path' => $relativePath,
+                        'report_date' => $data['report_date'],
+                        'status' => ImportJob::STATUS_PENDING,
+                    ]);
 
-                        Notification::make()
-                            ->title('Hisobot muvaffaqiyatli yuklandi')
-                            ->body(sprintf(
-                                '%d kafedra, %d guruh, %d talaba',
-                                $report->departments()->count(),
-                                $report->groups()->count(),
-                                $report->students()->count(),
-                            ))
-                            ->success()
-                            ->send();
-                    } catch (\Throwable $e) {
-                        Notification::make()
-                            ->title('Yuklashda xatolik')
-                            ->body($e->getMessage())
-                            ->danger()
-                            ->send();
-                    } finally {
-                        Storage::disk('local')->delete($relativePath);
-                    }
+                    ProcessReportImport::dispatch($job->id);
+
+                    Notification::make()
+                        ->title('Fayl qabul qilindi')
+                        ->body('Hisobot orqa fonda yuklanmoqda. Tugagach bildirishnoma keladi.')
+                        ->info()
+                        ->send();
                 }),
         ];
     }
