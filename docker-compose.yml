@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: marketing-university:latest
+    container_name: marketing-university
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8090:80"
+    env_file:
+      - .env
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./database/database.sqlite:/var/www/html/database/database.sqlite
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 4g
+    cpus: 1.0
+    mem_limit: 4g
+    memswap_limit: 4g
+    # NOTE: per-container 25GB storage limit via storage_opt requires
+    # xfs+pquota or devicemapper/btrfs/zfs storage driver. Current host
+    # uses overlayfs, so disk is limited at the host filesystem level.
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
