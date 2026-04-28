@@ -30,6 +30,13 @@ class ReportResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Hisobotlar';
 
+    public static function canAccess(): bool
+    {
+        $role = auth()->user()?->role;
+
+        return in_array($role, [\App\Models\User::ROLE_SUPER, \App\Models\User::ROLE_MARKETING], true);
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components([]);

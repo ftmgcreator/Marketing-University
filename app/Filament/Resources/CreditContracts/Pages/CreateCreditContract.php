@@ -24,7 +24,7 @@ class CreateCreditContract extends CreateRecord
     {
         $credits = (int) ($data['credits_count'] ?? 0);
 
-        $data['contract_number'] ??= CreditContract::nextContractNumber();
+        $data['contract_number'] = CreditContract::nextContractNumber();
         $data['contract_date'] ??= now()->toDateString();
         $data['payment_status'] ??= 'pending';
         $data['paid_amount'] ??= 0;

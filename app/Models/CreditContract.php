@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
     'contract_number', 'contract_date',
-    'full_name',
-    'speciality', 'group_name',
-    'jshshir', 'passport',
-    'subject_name', 'credits_count', 'price_per_credit', 'total_amount',
+    'full_name', 'address', 'jshshir', 'passport', 'phone', 'student_code',
+    'speciality', 'speciality_id', 'faculty', 'education_type', 'education_form',
+    'course', 'group_name',
+    'subject_name', 'subjects', 'credits_count', 'price_per_credit', 'total_amount',
     'payment_status', 'paid_amount',
     'notes',
 ])]
@@ -26,7 +26,28 @@ class CreditContract extends Model
             'price_per_credit' => 'integer',
             'total_amount' => 'integer',
             'paid_amount' => 'integer',
+            'subjects' => 'array',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (self $contract): void {
+            $specialityId = $contract->getAttribute('speciality_id');
+            if (! $specialityId) {
+                return;
+            }
+
+            $s = Speciality::find($specialityId);
+            if (! $s) {
+                return;
+            }
+
+            $contract->setAttribute('speciality', $s->name);
+            $contract->setAttribute('faculty', $s->faculty);
+            $contract->setAttribute('education_type', $s->education_type);
+            $contract->setAttribute('education_form', $s->education_form);
+        });
     }
 
     public static function nextContractNumber(): string
