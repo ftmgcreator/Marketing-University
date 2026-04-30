@@ -13,11 +13,12 @@ FROM php:8.3-fpm-alpine AS app
 RUN apk add --no-cache \
         nginx supervisor bash tini git curl \
         icu-dev libzip-dev oniguruma-dev sqlite sqlite-dev sqlite-libs \
+        postgresql-dev postgresql-client \
         libpng-dev libjpeg-turbo-dev freetype-dev libxml2-dev \
         zip unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        pdo pdo_sqlite gd intl mbstring zip bcmath exif opcache pcntl \
+        pdo pdo_sqlite pdo_pgsql gd intl mbstring zip bcmath exif opcache pcntl \
     && rm -rf /var/cache/apk/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

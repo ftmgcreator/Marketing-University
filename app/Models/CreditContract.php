@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 #[Fillable([
     'contract_number', 'contract_date',
@@ -16,7 +18,25 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class CreditContract extends Model
 {
+    use LogsActivity;
+
     public const PRICE_PER_CREDIT = 100000;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'contract_number', 'contract_date',
+                'full_name', 'jshshir', 'phone',
+                'speciality', 'faculty', 'education_form', 'course', 'group_name',
+                'credits_count', 'total_amount',
+                'payment_status', 'paid_amount',
+                'notes',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('credit_contract');
+    }
 
     protected function casts(): array
     {

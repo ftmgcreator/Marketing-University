@@ -11,7 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'rahbariyat' => \App\Http\Middleware\EnsureRahbariyat::class,
+            'super' => \App\Http\Middleware\EnsureSuperAdmin::class,
+        ]);
+
+        $middleware->redirectGuestsTo(fn () => route('filament.admin.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -79,7 +79,11 @@
                             <td class="left">
                                 <span class="name-cell">
                                     <span class="avatar">{{ initials($f->name) }}</span>
-                                    <a class="row-link" href="{{ route('public.faculty', $f->slug) }}">{{ $f->name }}</a>
+                                    @if (auth()->user()?->isSuperAdmin())
+                                        <a class="row-link" href="{{ route('public.faculty', $f->slug) }}">{{ $f->name }}</a>
+                                    @else
+                                        <span class="row-link">{{ $f->name }}</span>
+                                    @endif
                                 </span>
                             </td>
                             <td class="num"><span class="badge primary">{{ $f->department_count }}</span></td>

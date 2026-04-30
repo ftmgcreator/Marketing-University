@@ -22,12 +22,14 @@ class User extends Authenticatable implements FilamentUser
     public const ROLE_ADMIN = 'admin';
     public const ROLE_MARKETING = 'marketing';
     public const ROLE_ZAMDEKAN = 'zamdekan';
+    public const ROLE_RAHBARIYAT = 'rahbariyat';
 
     public const PANEL_ROLES = [
         self::ROLE_SUPER,
         self::ROLE_ADMIN,
         self::ROLE_MARKETING,
         self::ROLE_ZAMDEKAN,
+        self::ROLE_RAHBARIYAT,
     ];
 
     public const ROLE_LABELS = [
@@ -35,6 +37,7 @@ class User extends Authenticatable implements FilamentUser
         self::ROLE_ADMIN => 'Administrator',
         self::ROLE_MARKETING => 'Marketing xodimi',
         self::ROLE_ZAMDEKAN => 'Zamdekan',
+        self::ROLE_RAHBARIYAT => 'Rahbariyat',
     ];
 
     public function canAccessPanel(Panel $panel): bool
@@ -45,6 +48,11 @@ class User extends Authenticatable implements FilamentUser
     public function isSuperAdmin(): bool
     {
         return $this->role === self::ROLE_SUPER;
+    }
+
+    public function isRahbariyat(): bool
+    {
+        return $this->role === self::ROLE_RAHBARIYAT;
     }
 
     protected function casts(): array

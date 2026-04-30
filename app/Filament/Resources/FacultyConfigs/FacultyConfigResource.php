@@ -4,6 +4,7 @@ namespace App\Filament\Resources\FacultyConfigs;
 
 use App\Filament\Resources\FacultyConfigs\Pages\ManageFacultyConfigs;
 use App\Models\FacultyConfig;
+use App\Models\User;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -30,6 +31,11 @@ class FacultyConfigResource extends Resource
     protected static ?string $modelLabel = 'Fakultet sozlamasi';
 
     protected static ?string $pluralModelLabel = 'Fakultet sozlamalari';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user() instanceof User && auth()->user()->isSuperAdmin();
+    }
 
     public static function form(Schema $schema): Schema
     {

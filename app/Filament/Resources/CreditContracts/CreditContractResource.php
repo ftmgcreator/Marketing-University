@@ -399,15 +399,30 @@ class CreditContractResource extends Resource
                             ->send();
                     }),
 
+                Action::make('history')
+                    ->label('Tarix')
+                    ->icon(Heroicon::OutlinedClock)
+                    ->iconButton()
+                    ->tooltip("O'zgarishlar tarixi")
+                    ->color('gray')
+                    ->modalHeading(fn (CreditContract $record) => $record->contract_number." — o'zgarishlar tarixi")
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Yopish')
+                    ->modalContent(fn (CreditContract $record) => view('filament.credit-contracts.history', [
+                        'activities' => $record->activities()->with('causer')->latest()->get(),
+                    ])),
+
                 EditAction::make()
                     ->label('Tahrirlash')
                     ->iconButton()
                     ->tooltip('Tahrirlash')
-                    ->color('primary'),
+                    ->color('primary')
+                    ->visible(fn (CreditContract $record): bool => static::canEdit($record)),
                 DeleteAction::make()
                     ->label('O\'chirish')
                     ->iconButton()
-                    ->tooltip('O\'chirish'),
+                    ->tooltip('O\'chirish')
+                    ->visible(fn (CreditContract $record): bool => static::canDelete($record)),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

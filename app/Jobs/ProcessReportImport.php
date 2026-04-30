@@ -60,7 +60,7 @@ class ProcessReportImport implements ShouldQueue
             $job->update([
                 'status' => ImportJob::STATUS_FAILED,
                 'finished_at' => now(),
-                'message' => $e->getMessage(),
+                'message' => $this->shortenMessage($e->getMessage()),
             ]);
 
             $this->notifyUser($job, false);
@@ -82,7 +82,7 @@ class ProcessReportImport implements ShouldQueue
             $job->update([
                 'status' => ImportJob::STATUS_FAILED,
                 'finished_at' => now(),
-                'message' => $exception->getMessage(),
+                'message' => $this->shortenMessage($exception->getMessage()),
             ]);
 
             $this->notifyUser($job, false);
@@ -91,6 +91,16 @@ class ProcessReportImport implements ShouldQueue
         if ($job->file_path) {
             Storage::disk('local')->delete($job->file_path);
         }
+    }
+
+    private function shortenMessage(string $message): string
+    {
+        $firstLine = strtok($message, "\n") ?: $message;
+        if (preg_match('/^(SQLSTATE\[[^\]]+\][^:]*:[^(]+)/u', $firstLine, $m)) {
+            $firstLine = trim($m[1]);
+        }
+
+        return mb_substr($firstLine, 0, 240);
     }
 
     private function notifyUser(ImportJob $job, bool $success): void

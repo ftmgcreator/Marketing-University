@@ -12,7 +12,9 @@ services:
       - .env
     volumes:
       - ./storage:/var/www/html/storage
-      - ./database/database.sqlite:/var/www/html/database/database.sqlite
+    depends_on:
+      db:
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -30,3 +32,28 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+
+  db:
+    image: postgres:16-alpine
+    container_name: marketing-university-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-marketing_university}
+      POSTGRES_USER: ${DB_USERNAME:-marketing}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-marketing} -d ${DB_DATABASE:-marketing_university}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+
+volumes:
+  pgdata:

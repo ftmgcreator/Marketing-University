@@ -112,6 +112,7 @@ class UserResource extends Resource
                         User::ROLE_ADMIN => 'warning',
                         User::ROLE_MARKETING => 'success',
                         User::ROLE_ZAMDEKAN => 'info',
+                        User::ROLE_RAHBARIYAT => 'primary',
                         default => 'gray',
                     }),
 
@@ -198,6 +199,7 @@ class UserResource extends Resource
             User::ROLE_ADMIN => User::ROLE_LABELS[User::ROLE_ADMIN],
             User::ROLE_MARKETING => User::ROLE_LABELS[User::ROLE_MARKETING],
             User::ROLE_ZAMDEKAN => User::ROLE_LABELS[User::ROLE_ZAMDEKAN],
+            User::ROLE_RAHBARIYAT => User::ROLE_LABELS[User::ROLE_RAHBARIYAT],
         ];
     }
 }
