@@ -63,7 +63,7 @@ class AdminPanelProvider extends PanelProvider
 
                     return new HtmlString(<<<HTML
                         <a href="{$url}" target="_blank" rel="noopener"
-                           style="display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:8px; background:linear-gradient(135deg,#10b981,#059669); color:#fff; font-weight:600; font-size:14px; text-decoration:none; box-shadow:0 1px 3px rgba(0,0,0,0.15); white-space:nowrap; margin-right:8px;"
+                           style="display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:8px; background:linear-gradient(135deg,#10b981,#059669); color:#fff; font-weight:600; font-size:14px; text-decoration:none; box-shadow:0 1px 3px rgba(0,0,0,0.15); white-space:nowrap; margin-left:14px;"
                            onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
@@ -80,6 +80,11 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn (): HtmlString => new HtmlString('<style>
+                    /* Topbar end items spacing — open up bell / avatar / custom buttons */
+                    .fi-topbar-end {
+                        gap: 1.1rem !important;
+                    }
+
                     /* Full-width search input in tables */
                     .fi-ta-search-field {
                         width: 100% !important;

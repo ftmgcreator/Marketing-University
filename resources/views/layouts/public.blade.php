@@ -94,6 +94,19 @@
             text-transform: uppercase;
         }
         .header-meta { display: flex; align-items: center; gap: 0.75rem; }
+        .panel-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-size: 0.78rem; font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            padding: 0.5rem 0.95rem;
+            border-radius: 99px;
+            border: 1px solid rgba(239,68,68,0.4);
+            box-shadow: 0 4px 14px -4px rgba(239,68,68,0.5);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .panel-link:hover { opacity: 0.9; transform: translateY(-1px); color: #fff; }
+        .panel-link svg { width: 14px; height: 14px; }
         .report-tag {
             display: inline-flex; align-items: center; gap: 0.55rem;
             font-size: 0.78rem; font-weight: 500;
@@ -446,14 +459,24 @@
                     <div class="tag">To'lov statistikasi</div>
                 </div>
             </a>
-            @isset($report)
-                <div class="header-meta">
+            <div class="header-meta">
+                @isset($report)
                     <div class="report-tag">
                         <span class="dot"></span>
                         <span>{{ $report->report_date->format('d.m.Y') }}</span>
                     </div>
-                </div>
-            @endisset
+                @endisset
+                @auth
+                    <a href="{{ url('/admin') }}" class="panel-link" title="Adminstrator paneliga qaytish">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        <span>Panelga qaytish</span>
+                    </a>
+                @endauth
+            </div>
         </div>
     </header>
 
